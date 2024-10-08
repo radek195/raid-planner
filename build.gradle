@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'groovy'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'org.flywaydb.flyway' version '8.4.4'
@@ -9,6 +10,7 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 apply from: 'gradle/flyway/flyway.gradle'
+apply from: 'gradle/test/test.gradle'
 
 java {
 	toolchain {
@@ -33,9 +35,8 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
 }

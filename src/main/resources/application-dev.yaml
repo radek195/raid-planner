@@ -2,7 +2,7 @@ spring:
     application:
         name: raid-planner
     datasource:
-        url: jdbc:postgresql://localhost:5432/raid_planner
+        url: jdbc:postgresql://localhost:5432/postgres
         username: postgres
         password: password
     jpa:
