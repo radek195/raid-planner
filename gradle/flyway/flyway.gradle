@@ -1,7 +1,0 @@
-flyway {
-    url = 'jdbc:postgresql://localhost:5432/postgres'
-    user = 'postgres'
-    password = 'password'
-    schemas = ['raid_planner']
-    defaultSchema = 'raid_planner'
-}
