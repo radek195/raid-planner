@@ -2,8 +2,8 @@ package integration
 
 import com.example.raid_planner.domain.events.EventDto
 import com.example.raid_planner.domain.events.EventRepository
-import com.example.raid_planner.infrastructure.events.EventEntity
-import com.example.raid_planner.infrastructure.events.EventJpaRepository
+import com.example.raid_planner.infrastructure.repository.events.EventEntity
+import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository
 import config.RepositoryConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

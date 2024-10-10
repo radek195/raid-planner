@@ -1,6 +1,6 @@
 package com.example.raid_planner.domain.events;
 
-import com.example.raid_planner.infrastructure.events.EventEntity;
+import com.example.raid_planner.infrastructure.repository.events.EventEntity;
 import com.example.raid_planner.infrastructure.exceptions.EventNotReadyException;
 import com.example.raid_planner.infrastructure.utils.TimeService;
 import lombok.RequiredArgsConstructor;

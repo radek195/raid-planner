@@ -1,4 +1,4 @@
-package com.example.raid_planner.infrastructure.events;
+package com.example.raid_planner.infrastructure.repository.events;
 
 import com.example.raid_planner.domain.events.EventDto;
 import org.springframework.data.jpa.repository.JpaRepository;

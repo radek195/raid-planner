@@ -2,8 +2,8 @@ package unit
 
 import com.example.raid_planner.domain.events.EventDto
 import com.example.raid_planner.domain.events.EventRepository
-import com.example.raid_planner.infrastructure.events.EventJpaRepository
-import com.example.raid_planner.infrastructure.events.EventRepositoryImpl
+import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository
+import com.example.raid_planner.infrastructure.repository.events.EventRepositoryImpl
 import com.example.raid_planner.infrastructure.exceptions.EventNotFoundException
 import spock.lang.Specification
 import spock.lang.Subject

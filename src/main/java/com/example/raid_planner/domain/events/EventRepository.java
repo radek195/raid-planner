@@ -1,6 +1,6 @@
 package com.example.raid_planner.domain.events;
 
-import com.example.raid_planner.infrastructure.events.EventEntity;
+import com.example.raid_planner.infrastructure.repository.events.EventEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
