@@ -1,6 +1,7 @@
 package com.example.raid_planner.domain.events;
 
 import com.example.raid_planner.infrastructure.events.EventEntity;
+import com.example.raid_planner.infrastructure.exceptions.EventNotReadyException;
 import com.example.raid_planner.infrastructure.utils.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,8 @@ import java.util.UUID;
 public interface EventService {
 
     EventDto initializeEvent();
+
+    EventDto getEventByUUID(UUID uuid);
 
     @Service
     @RequiredArgsConstructor
@@ -27,5 +30,42 @@ public interface EventService {
                     .build();
             return eventRepository.save(EventEntity.from(newEvent));
         }
+
+        public EventDto getEventByUUID(UUID uuid) {
+            EventDto event = eventRepository.getByUUID(uuid);
+            if (event.getAttendeeId().equals(uuid) && !event.isReady()) {
+                throw new EventNotReadyException("Event is not ready yet.");
+            }
+            return event;
+        }
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

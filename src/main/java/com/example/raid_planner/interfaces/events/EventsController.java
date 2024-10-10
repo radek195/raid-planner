@@ -1,10 +1,12 @@
 package com.example.raid_planner.interfaces.events;
 
+import com.example.raid_planner.domain.events.EventDto;
 import com.example.raid_planner.domain.events.EventService;
+import com.example.raid_planner.infrastructure.exceptions.IncorrectParametersException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "api/v1/events")
@@ -16,5 +18,14 @@ public class EventsController {
     @PostMapping
     public EventInitializedResponse postNewEvent() {
         return EventInitializedResponse.from(eventService.initializeEvent());
+    }
+
+    @GetMapping(path = "/{uuid}")
+    public EventResponse getEvent(@PathVariable UUID uuid) {
+        EventDto eventDto = eventService.getEventByUUID(uuid);
+        if (eventDto == null) {
+            throw new IncorrectParametersException("Event is still in preparations.");
+        }
+        return EventResponse.from(eventDto);
     }
 }

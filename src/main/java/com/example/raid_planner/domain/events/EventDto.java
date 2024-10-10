@@ -19,6 +19,4 @@ public class EventDto {
     private LocalDateTime createdAt;
     private LocalDateTime plannedStart;
     private boolean isReady;
-
-
 }
