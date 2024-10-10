@@ -24,7 +24,7 @@ class EventRepositoryUT extends Specification {
                     .organizerId(UUID.randomUUID())
                     .plannedStart(LocalDateTime.now())
                     .createdAt(LocalDateTime.now().plusDays(2l))
-                    .isReady(false)
+                    .ready(false)
                     .build()
             eventJpaRepository.findByOrganizerIdOrAttendeeId(event.attendeeId, event.attendeeId) >> event
 

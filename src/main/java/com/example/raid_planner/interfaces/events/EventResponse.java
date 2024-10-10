@@ -18,7 +18,7 @@ public class EventResponse {
     private UUID attendeeId;
     private LocalDateTime createdAt;
     private LocalDateTime plannedStart;
-    private boolean isReady;
+    private boolean ready;
 
     public static EventResponse from(EventDto event) {
         return EventResponse.builder()
@@ -27,7 +27,7 @@ public class EventResponse {
                 .attendeeId(event.getAttendeeId())
                 .createdAt(event.getCreatedAt())
                 .plannedStart(event.getPlannedStart())
-                .isReady(event.isReady())
+                .ready(event.isReady())
                 .build();
     }
 }

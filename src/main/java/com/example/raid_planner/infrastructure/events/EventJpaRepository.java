@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface EventJpaRepository extends JpaRepository<EventEntity, Long> {
 
     EventDto findByOrganizerIdOrAttendeeId(UUID organizerId, UUID attendeeId);
+
+    EventEntity findByOrganizerId(UUID organizerId);
 }

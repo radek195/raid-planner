@@ -54,7 +54,7 @@ class EventServiceUT extends Specification {
 
     def getNotReadyEventDto(UUID organizerId, UUID attendeeId) {
         EventDto.builder()
-            .isReady(false)
+            .ready(false)
             .organizerId(organizerId)
             .attendeeId(attendeeId)
             .build()
@@ -62,7 +62,7 @@ class EventServiceUT extends Specification {
 
     def getReadyEventDto(UUID organizerId, UUID attendeeId) {
         EventDto.builder()
-                .isReady(true)
+                .ready(true)
                 .organizerId(organizerId)
                 .attendeeId(attendeeId)
                 .build()

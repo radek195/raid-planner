@@ -4,6 +4,7 @@ import com.example.raid_planner.domain.events.EventDto;
 import com.example.raid_planner.domain.events.EventService;
 import com.example.raid_planner.infrastructure.exceptions.IncorrectParametersException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class EventsController {
     private final EventService eventService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EventInitializedResponse postNewEvent() {
         return EventInitializedResponse.from(eventService.initializeEvent());
     }
@@ -28,4 +30,19 @@ public class EventsController {
         }
         return EventResponse.from(eventDto);
     }
+
+    @PatchMapping(path = "/{uuid}")
+    public EventResponse updateEventReadys(
+            @PathVariable UUID uuid,
+            @RequestBody EventReadyRequest eventReady) {
+
+        EventDto eventDto = eventService.eventReady(uuid, eventReady.getPlannedStart());
+        return EventResponse.from(eventDto);
+    }
 }
+
+
+
+
+
+

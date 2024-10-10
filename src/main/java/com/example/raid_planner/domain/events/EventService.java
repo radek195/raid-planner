@@ -6,6 +6,7 @@ import com.example.raid_planner.infrastructure.utils.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface EventService {
@@ -13,6 +14,8 @@ public interface EventService {
     EventDto initializeEvent();
 
     EventDto getEventByUUID(UUID uuid);
+
+    EventDto eventReady(UUID uuid, LocalDateTime plannedStart);
 
     @Service
     @RequiredArgsConstructor
@@ -26,7 +29,7 @@ public interface EventService {
                     .organizerId(UUID.randomUUID())
                     .attendeeId(UUID.randomUUID())
                     .createdAt(timeService.now())
-                    .isReady(false)
+                    .ready(false)
                     .build();
             return eventRepository.save(EventEntity.from(newEvent));
         }
@@ -37,6 +40,11 @@ public interface EventService {
                 throw new EventNotReadyException("Event is not ready yet.");
             }
             return event;
+        }
+
+
+        public EventDto eventReady(UUID uuid, LocalDateTime plannedStart) {
+            return eventRepository.updateEventReadiness(plannedStart, uuid);
         }
 
     }

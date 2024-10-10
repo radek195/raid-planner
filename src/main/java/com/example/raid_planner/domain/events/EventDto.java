@@ -18,5 +18,5 @@ public class EventDto {
     private UUID attendeeId;
     private LocalDateTime createdAt;
     private LocalDateTime plannedStart;
-    private boolean isReady;
+    private boolean ready;
 }

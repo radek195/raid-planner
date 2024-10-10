@@ -31,7 +31,8 @@ public class EventEntity {
     private UUID attendeeId;
     private LocalDateTime createdAt;
     private LocalDateTime plannedStart;
-    private boolean isReady;
+    private boolean ready;
+
 
 
 
@@ -42,7 +43,7 @@ public class EventEntity {
                 .attendeeId(eventDto.getAttendeeId())
                 .createdAt(eventDto.getCreatedAt())
                 .plannedStart(eventDto.getPlannedStart())
-                .isReady(eventDto.isReady())
+                .ready(eventDto.isReady())
                 .build();
     }
 
@@ -53,6 +54,7 @@ public class EventEntity {
                 .attendeeId(this.getAttendeeId())
                 .createdAt(this.getCreatedAt())
                 .plannedStart(this.getPlannedStart())
+                .ready(this.ready)
                 .build();
     }
 }
