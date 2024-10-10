@@ -32,7 +32,7 @@ public class EventsController {
     }
 
     @PatchMapping(path = "/{uuid}")
-    public EventResponse updateEventReadys(
+    public EventResponse updateEventReady(
             @PathVariable UUID uuid,
             @RequestBody EventReadyRequest eventReady) {
 
