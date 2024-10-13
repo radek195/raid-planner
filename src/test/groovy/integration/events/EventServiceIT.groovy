@@ -1,8 +1,10 @@
 package integration.events
 
 import com.example.raid_planner.domain.events.EventDto
-import com.example.raid_planner.domain.events.EventRepository
 import com.example.raid_planner.domain.events.EventService
+import com.example.raid_planner.infrastructure.repository.events.EventEntity
+import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository
+import com.example.raid_planner.infrastructure.utils.TimeService
 import config.RepositoryConfig
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -13,7 +15,7 @@ import spock.lang.Subject
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
-@SpringBootTest(classes = [EventService.Impl, RepositoryConfig.class])
+@SpringBootTest(classes = [EventService.Impl, TimeService.Impl, RepositoryConfig.class])
 @ActiveProfiles('test')
 class EventServiceIT extends Specification {
 
@@ -22,17 +24,17 @@ class EventServiceIT extends Specification {
     EventService eventService
 
     @Autowired
-    EventRepository eventRepository
+    EventJpaRepository eventJpaRepository
 
     def 'should initialize one new event record'() {
         given:
-            eventRepository.findAll().size() == 0
+            eventJpaRepository.findAll().size() == 0
 
         when:
             eventService.initializeEvent()
 
         then:
-            eventRepository.findAll().size() == 1
+            eventJpaRepository.findAll().size() == 1
     }
 
     def 'should initialize new event with correct values'() {
@@ -43,6 +45,28 @@ class EventServiceIT extends Specification {
             with(event) {
                 !isReady()
                 ChronoUnit.SECONDS.between(createdAt, LocalDateTime.now()) < 5
+            }
+    }
+
+    def 'should update readiness for event'() {
+        given:
+            LocalDateTime plannedTime = LocalDateTime.now().plusDays(5)
+            UUID organizerUUID = UUID.randomUUID()
+            EventEntity entity = EventEntity.builder()
+                    .organizerId(organizerUUID)
+                    .attendeeId(UUID.randomUUID())
+                    .createdAt(LocalDateTime.now())
+                    .ready(false)
+                    .build()
+            eventJpaRepository.save(entity)
+
+        when:
+            EventDto eventDto = eventService.updateEventReadiness(plannedTime, organizerUUID)
+
+        then:
+            with(eventDto) {
+                ready
+                plannedStart == plannedTime
             }
     }
 }

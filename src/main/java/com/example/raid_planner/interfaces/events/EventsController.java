@@ -2,7 +2,6 @@ package com.example.raid_planner.interfaces.events;
 
 import com.example.raid_planner.domain.events.EventDto;
 import com.example.raid_planner.domain.events.EventService;
-import com.example.raid_planner.infrastructure.exceptions.IncorrectParametersException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +23,7 @@ public class EventsController {
 
     @GetMapping(path = "/{uuid}")
     public EventResponse getEvent(@PathVariable UUID uuid) {
-        EventDto eventDto = eventService.getEventByUUID(uuid);
-        if (eventDto == null) {
-            throw new IncorrectParametersException("Event is still in preparations.");
-        }
+        EventDto eventDto = eventService.getByUUID(uuid);
         return EventResponse.from(eventDto);
     }
 
@@ -36,7 +32,7 @@ public class EventsController {
             @PathVariable UUID uuid,
             @RequestBody EventReadyRequest eventReady) {
 
-        EventDto eventDto = eventService.eventReady(uuid, eventReady.getPlannedStart());
+        EventDto eventDto = eventService.updateEventReadiness(eventReady.getPlannedStart(), uuid);
         return EventResponse.from(eventDto);
     }
 }

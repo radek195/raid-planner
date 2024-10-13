@@ -10,18 +10,18 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @ComponentScan(
-        basePackages = "com.example.raid_planner.infrastructure"
+        basePackages = "com.example.raid_planner.infrastructure.repository"
 )
 @ImportAutoConfiguration({
         HibernateJpaAutoConfiguration.class,
         DataSourceAutoConfiguration.class
         })
 @EnableJpaRepositories(
-        basePackages = "com.example.raid_planner.infrastructure",
+        basePackages = "com.example.raid_planner.infrastructure.repository",
         considerNestedRepositories = true
 )
 @EntityScan(
-        basePackages = "com.example.raid_planner.infrastructure"
+        basePackages = "com.example.raid_planner.infrastructure.repository"
 )
 public class RepositoryConfig {
 }

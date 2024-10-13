@@ -34,7 +34,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(EventNotFoundException.class)
     public ResponseEntity<Object> handleException(EventNotFoundException exception) {
-        HttpStatus badRequest = HttpStatus.UNAUTHORIZED;
+        HttpStatus badRequest = HttpStatus.NOT_FOUND;
         ApiException apiException = new ApiException(
                 exception.getMessage(),
                 badRequest,

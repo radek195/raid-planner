@@ -1,79 +1,68 @@
 package com.example.raid_planner.domain.events;
 
-import com.example.raid_planner.infrastructure.repository.events.EventEntity;
+import com.example.raid_planner.infrastructure.exceptions.EventNotFoundException;
 import com.example.raid_planner.infrastructure.exceptions.EventNotReadyException;
+import com.example.raid_planner.infrastructure.repository.events.EventEntity;
+import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository;
 import com.example.raid_planner.infrastructure.utils.TimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 
 public interface EventService {
 
     EventDto initializeEvent();
 
-    EventDto getEventByUUID(UUID uuid);
+    EventDto getByUUID(UUID uuid);
 
-    EventDto eventReady(UUID uuid, LocalDateTime plannedStart);
+    EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid);
 
     @Service
     @RequiredArgsConstructor
     class Impl implements EventService {
 
+        private final EventJpaRepository eventJpaRepository;
         private final TimeService timeService;
-        private final EventRepository eventRepository;
 
         public EventDto initializeEvent() {
-            EventDto newEvent = EventDto.builder()
+            EventEntity event = EventEntity.builder()
                     .organizerId(UUID.randomUUID())
                     .attendeeId(UUID.randomUUID())
                     .createdAt(timeService.now())
                     .ready(false)
                     .build();
-            return eventRepository.save(EventEntity.from(newEvent));
+
+            return eventJpaRepository
+                    .save(event)
+                    .toDto();
         }
 
-        public EventDto getEventByUUID(UUID uuid) {
-            EventDto event = eventRepository.getByUUID(uuid);
+        public EventDto getByUUID(UUID uuid) {
+            EventEntity event = eventJpaRepository.findByOrganizerIdOrAttendeeId(uuid, uuid);
+            if (event == null) {
+                throw new EventNotFoundException("Could not find event with UUID " + uuid);
+            }
             if (event.getAttendeeId().equals(uuid) && !event.isReady()) {
                 throw new EventNotReadyException("Event is not ready yet.");
             }
-            return event;
+            return event.toDto();
         }
 
-
-        public EventDto eventReady(UUID uuid, LocalDateTime plannedStart) {
-            return eventRepository.updateEventReadiness(plannedStart, uuid);
+        @Transactional
+        public EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid) {
+            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
+            if (event == null) {
+                throw new EventNotFoundException("Could not find event with UUID " + uuid);
+            }
+            event.setPlannedStart(plannedStart);
+            event.setReady(true);
+            return event.toDto();
         }
+
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
