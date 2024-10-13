@@ -1,6 +1,7 @@
 package com.example.raid_planner.infrastructure.repository.events;
 
 import com.example.raid_planner.domain.events.EventDto;
+import com.example.raid_planner.domain.groups.GroupDto;
 import com.example.raid_planner.infrastructure.repository.groups.GroupEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,7 +37,7 @@ public class EventEntity {
     private boolean ready;
 
     @OneToMany(mappedBy = "event")
-    List<GroupEntity> groups;
+    private List<GroupEntity> groups;
 
 
     public static EventEntity from(EventDto eventDto) {
@@ -58,6 +59,14 @@ public class EventEntity {
                 .createdAt(this.getCreatedAt())
                 .plannedStart(this.getPlannedStart())
                 .ready(this.ready)
+                .groups(mapGroups())
                 .build();
+    }
+
+    private List<GroupDto> mapGroups() {
+        if (groups == null) {
+            return List.of();
+        }
+        return this.groups.stream().map(GroupEntity::toDto).toList();
     }
 }

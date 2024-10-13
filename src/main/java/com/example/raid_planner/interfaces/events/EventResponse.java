@@ -1,12 +1,15 @@
 package com.example.raid_planner.interfaces.events;
 
 import com.example.raid_planner.domain.events.EventDto;
+import com.example.raid_planner.domain.groups.GroupDto;
+import com.example.raid_planner.interfaces.groups.GroupResponse;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -20,6 +23,8 @@ public class EventResponse {
     private LocalDateTime plannedStart;
     private boolean ready;
 
+    private List<GroupResponse> groups;
+
     public static EventResponse from(EventDto event) {
         return EventResponse.builder()
                 .id(event.getId())
@@ -28,6 +33,11 @@ public class EventResponse {
                 .createdAt(event.getCreatedAt())
                 .plannedStart(event.getPlannedStart())
                 .ready(event.isReady())
+                .groups(mapGroups(event.getGroups()))
                 .build();
+    }
+
+    private static List<GroupResponse> mapGroups(List<GroupDto> dtos) {
+        return dtos.stream().map(GroupResponse::from).toList();
     }
 }
