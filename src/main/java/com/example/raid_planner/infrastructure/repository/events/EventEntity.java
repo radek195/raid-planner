@@ -1,10 +1,12 @@
 package com.example.raid_planner.infrastructure.repository.events;
 
 import com.example.raid_planner.domain.events.EventDto;
+import com.example.raid_planner.infrastructure.repository.groups.GroupEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,7 +35,8 @@ public class EventEntity {
     private LocalDateTime plannedStart;
     private boolean ready;
 
-
+    @OneToMany(mappedBy = "event")
+    List<GroupEntity> groups;
 
 
     public static EventEntity from(EventDto eventDto) {

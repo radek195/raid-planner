@@ -22,11 +22,11 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     public EventDto getByUUID(UUID uuid) {
-        EventDto event = eventJpaRepository.findByOrganizerIdOrAttendeeId(uuid, uuid);
+        EventEntity event = eventJpaRepository.findByOrganizerIdOrAttendeeId(uuid, uuid);
         if (event == null) {
             throw new EventNotFoundException("Could not find event with UUID " + uuid);
         }
-        return event;
+        return event.toDto();
     }
 
     @Transactional

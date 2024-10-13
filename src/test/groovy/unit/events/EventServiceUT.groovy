@@ -1,4 +1,4 @@
-package unit
+package unit.events
 
 import com.example.raid_planner.domain.events.EventDto
 import com.example.raid_planner.domain.events.EventRepository
