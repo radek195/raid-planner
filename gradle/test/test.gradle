@@ -4,4 +4,5 @@ dependencies {
     testImplementation "org.apache.groovy:groovy:4.0.22"
     testRuntimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.apache.groovy:groovy-sql:4.0.22'
 }

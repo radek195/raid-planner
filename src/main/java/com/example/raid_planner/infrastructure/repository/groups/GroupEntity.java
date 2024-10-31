@@ -1,9 +1,12 @@
 package com.example.raid_planner.infrastructure.repository.groups;
 
 import com.example.raid_planner.domain.groups.GroupDto;
+import com.example.raid_planner.infrastructure.repository.attender.AttenderEntity;
 import com.example.raid_planner.infrastructure.repository.events.EventEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "groups")
@@ -33,13 +36,8 @@ public class GroupEntity {
     @JoinColumn(name = "event_id")
     private EventEntity event;
 
-    public static GroupEntity from(GroupDto groupDto) {
-        return GroupEntity.builder()
-                .id(groupDto.getId())
-                .groupType(groupDto.getGroupType())
-                .ready(groupDto.getReady())
-                .build();
-    }
+    @OneToMany(mappedBy = "group", fetch = FetchType.EAGER)
+    private List<AttenderEntity> attenders;
 
     public GroupDto toDto() {
         return GroupDto.builder()

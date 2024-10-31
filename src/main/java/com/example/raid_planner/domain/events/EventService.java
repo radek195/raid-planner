@@ -1,6 +1,6 @@
 package com.example.raid_planner.domain.events;
 
-import com.example.raid_planner.infrastructure.exceptions.EventNotFoundException;
+import com.example.raid_planner.infrastructure.exceptions.NotFoundException;
 import com.example.raid_planner.infrastructure.exceptions.EventNotReadyException;
 import com.example.raid_planner.infrastructure.repository.events.EventEntity;
 import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository;
@@ -44,7 +44,7 @@ public interface EventService {
         public EventDto getByUUID(UUID uuid) {
             EventEntity event = eventJpaRepository.findByOrganizerIdOrAttendeeId(uuid, uuid);
             if (event == null) {
-                throw new EventNotFoundException("Could not find event with UUID " + uuid);
+                throw new NotFoundException("Could not find event with UUID " + uuid);
             }
             if (event.getAttendeeId().equals(uuid) && !event.isReady()) {
                 throw new EventNotReadyException("Event is not ready yet.");
@@ -56,7 +56,7 @@ public interface EventService {
         public EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid) {
             EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
             if (event == null) {
-                throw new EventNotFoundException("Could not find event with UUID " + uuid);
+                throw new NotFoundException("Could not find event with UUID " + uuid);
             }
             event.setPlannedStart(plannedStart);
             event.setReady(true);

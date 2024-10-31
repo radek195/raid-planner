@@ -32,9 +32,20 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(apiException, badRequest);
     }
 
-    @ExceptionHandler(EventNotFoundException.class)
-    public ResponseEntity<Object> handleException(EventNotFoundException exception) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleException(NotFoundException exception) {
         HttpStatus badRequest = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(
+                exception.getMessage(),
+                badRequest,
+                ZonedDateTime.now()
+        );
+        return new ResponseEntity<>(apiException, badRequest);
+    }
+
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<Object> handleException(UnsupportedOperationException exception) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         ApiException apiException = new ApiException(
                 exception.getMessage(),
                 badRequest,
