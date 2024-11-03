@@ -1,6 +1,6 @@
 package com.example.raid_planner.infrastructure.repository.attender;
 
-import com.example.raid_planner.domain.AttenderDto;
+import com.example.raid_planner.domain.groups.AttenderDto;
 import com.example.raid_planner.infrastructure.repository.groups.GroupEntity;
 import jakarta.persistence.*;
 import lombok.*;

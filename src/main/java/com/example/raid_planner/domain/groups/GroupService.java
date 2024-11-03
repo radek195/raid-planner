@@ -1,6 +1,5 @@
 package com.example.raid_planner.domain.groups;
 
-import com.example.raid_planner.domain.AttenderDto;
 import com.example.raid_planner.infrastructure.exceptions.NotFoundException;
 import com.example.raid_planner.infrastructure.repository.attender.AttenderEntity;
 import com.example.raid_planner.infrastructure.repository.attender.AttenderJpaRepository;

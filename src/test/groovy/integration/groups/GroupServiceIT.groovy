@@ -1,14 +1,12 @@
 package integration.groups
 
-import com.example.raid_planner.domain.AttenderDto
+import com.example.raid_planner.domain.groups.AttenderDto
 import com.example.raid_planner.domain.events.EventDto
 import com.example.raid_planner.domain.groups.GroupDto
 import com.example.raid_planner.domain.groups.GroupService
-import com.example.raid_planner.infrastructure.repository.attender.AttenderEntity
 import com.example.raid_planner.infrastructure.repository.attender.Profession
 import com.example.raid_planner.infrastructure.repository.events.EventEntity
 import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository
-import com.example.raid_planner.infrastructure.repository.groups.GroupEntity
 import com.example.raid_planner.infrastructure.repository.groups.GroupJpaRepository
 import com.example.raid_planner.infrastructure.repository.groups.GroupType
 import config.RepositoryConfig

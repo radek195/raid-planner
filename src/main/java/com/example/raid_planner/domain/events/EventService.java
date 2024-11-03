@@ -21,6 +21,8 @@ public interface EventService {
 
     EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid);
 
+    void checkEventByUUIDForOrganizer(UUID uuid);
+
     @Service
     @RequiredArgsConstructor
     class Impl implements EventService {
@@ -63,6 +65,12 @@ public interface EventService {
             return event.toDto();
         }
 
+        public void checkEventByUUIDForOrganizer(UUID uuid) {
+            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
+            if (event == null) {
+                throw new NotFoundException("Could not find event with UUID " + uuid);
+            }
+        }
 
     }
 }

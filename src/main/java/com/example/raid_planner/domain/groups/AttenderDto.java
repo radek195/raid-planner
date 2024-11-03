@@ -1,4 +1,4 @@
-package com.example.raid_planner.domain;
+package com.example.raid_planner.domain.groups;
 
 import com.example.raid_planner.infrastructure.repository.attender.Profession;
 import lombok.Builder;

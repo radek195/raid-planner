@@ -1,5 +1,7 @@
 package com.example.raid_planner.interfaces.groups;
 
+import com.example.raid_planner.domain.events.EventService;
+import com.example.raid_planner.domain.groups.AttenderDto;
 import com.example.raid_planner.domain.groups.GroupDto;
 import com.example.raid_planner.domain.groups.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GroupsController {
 
+    private final EventService eventService;
     private final GroupService groupService;
 
     @PostMapping
@@ -26,5 +29,17 @@ public class GroupsController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteGroup(@PathVariable UUID uuid, @PathVariable Long id) {
         groupService.deleteGroup(uuid, id);
+    }
+
+    @PostMapping("/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void postAttender(@PathVariable UUID uuid, @PathVariable Long id, @RequestBody AttenderRequest request) {
+        eventService.checkEventByUUIDForOrganizer(uuid);
+        groupService.appendAttender(
+                id,
+                AttenderDto.builder()
+                        .requiredProfession(request.getRequiredProfession())
+                        .build()
+        );
     }
 }
