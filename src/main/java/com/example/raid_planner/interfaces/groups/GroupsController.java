@@ -31,14 +31,27 @@ public class GroupsController {
         groupService.deleteGroup(uuid, id);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/attender")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postAttender(@PathVariable UUID uuid, @PathVariable Long id, @RequestBody AttenderRequest request) {
-        eventService.checkEventByUUIDForOrganizer(uuid);
+    public void postAttender(@PathVariable UUID uuid, @PathVariable Long id, @RequestBody PostedAttenderRequest request) {
+        eventService.getEventByUUIDForOrganizer(uuid);
         groupService.appendAttender(
                 id,
                 AttenderDto.builder()
                         .requiredProfession(request.getRequiredProfession())
+                        .build()
+        );
+    }
+
+    @PatchMapping("/{groupId}/attender/{attenderId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void patchAttender(@PathVariable UUID uuid, @PathVariable Long groupId, @PathVariable Long attenderId, @RequestBody PatchedAttenderRequest request) {
+        eventService.getEventByUUIDForAttenderOrOrganizer(uuid);
+        groupService.signUpAttender(
+                attenderId,
+                AttenderDto.builder()
+                        .actualProfession(request.getActualProfession())
+                        .nickname(request.getNickname())
                         .build()
         );
     }

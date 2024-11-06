@@ -21,7 +21,9 @@ public interface EventService {
 
     EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid);
 
-    void checkEventByUUIDForOrganizer(UUID uuid);
+    EventEntity getEventByUUIDForOrganizer(UUID uuid);
+
+    EventEntity getEventByUUIDForAttenderOrOrganizer(UUID uuid);
 
     @Service
     @RequiredArgsConstructor
@@ -44,6 +46,26 @@ public interface EventService {
         }
 
         public EventDto getByUUID(UUID uuid) {
+            return getEventByUUIDForAttenderOrOrganizer(uuid).toDto();
+        }
+
+        @Transactional
+        public EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid) {
+            EventEntity event = getEventByUUIDForOrganizer(uuid);
+            event.setPlannedStart(plannedStart);
+            event.setReady(true);
+            return event.toDto();
+        }
+
+        public EventEntity getEventByUUIDForOrganizer(UUID uuid) {
+            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
+            if (event == null) {
+                throw new NotFoundException("Could not find event with UUID " + uuid);
+            }
+            return event;
+        }
+
+        public EventEntity getEventByUUIDForAttenderOrOrganizer(UUID uuid) {
             EventEntity event = eventJpaRepository.findByOrganizerIdOrAttendeeId(uuid, uuid);
             if (event == null) {
                 throw new NotFoundException("Could not find event with UUID " + uuid);
@@ -51,25 +73,7 @@ public interface EventService {
             if (event.getAttendeeId().equals(uuid) && !event.isReady()) {
                 throw new EventNotReadyException("Event is not ready yet.");
             }
-            return event.toDto();
-        }
-
-        @Transactional
-        public EventDto updateEventReadiness(LocalDateTime plannedStart, UUID uuid) {
-            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
-            if (event == null) {
-                throw new NotFoundException("Could not find event with UUID " + uuid);
-            }
-            event.setPlannedStart(plannedStart);
-            event.setReady(true);
-            return event.toDto();
-        }
-
-        public void checkEventByUUIDForOrganizer(UUID uuid) {
-            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
-            if (event == null) {
-                throw new NotFoundException("Could not find event with UUID " + uuid);
-            }
+            return event;
         }
 
     }

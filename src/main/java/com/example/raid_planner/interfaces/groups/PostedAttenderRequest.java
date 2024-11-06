@@ -4,6 +4,6 @@ import com.example.raid_planner.infrastructure.repository.attender.Profession;
 import lombok.Getter;
 
 @Getter
-public class AttenderRequest {
+public class PostedAttenderRequest {
     private Profession requiredProfession;
 }

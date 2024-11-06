@@ -1,10 +1,10 @@
 package com.example.raid_planner.domain.groups;
 
+import com.example.raid_planner.domain.events.EventService;
 import com.example.raid_planner.infrastructure.exceptions.NotFoundException;
 import com.example.raid_planner.infrastructure.repository.attender.AttenderEntity;
 import com.example.raid_planner.infrastructure.repository.attender.AttenderJpaRepository;
 import com.example.raid_planner.infrastructure.repository.events.EventEntity;
-import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository;
 import com.example.raid_planner.infrastructure.repository.groups.GroupEntity;
 import com.example.raid_planner.infrastructure.repository.groups.GroupJpaRepository;
 import com.example.raid_planner.infrastructure.repository.groups.GroupType;
@@ -23,19 +23,19 @@ public interface GroupService {
 
     AttenderDto appendAttender(Long groupId, AttenderDto attenderDto);
 
+    void signUpAttender(Long attenderId, AttenderDto attenderDto);
+
     @Service
     @RequiredArgsConstructor
     class Impl implements GroupService {
 
-        private final EventJpaRepository eventJpaRepository;
+        private final EventService eventService;
+
         private final GroupJpaRepository groupJpaRepository;
         private final AttenderJpaRepository attenderJpaRepository;
 
         public GroupDto createGroupOfType(UUID uuid, GroupType type) {
-            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
-            if (event == null) {
-                throw new NotFoundException("Could not find event with UUID " + uuid);
-            }
+            EventEntity event = eventService.getEventByUUIDForOrganizer(uuid);
             GroupEntity group = GroupEntity.builder()
                     .groupType(type)
                     .ready(false)
@@ -45,19 +45,12 @@ public interface GroupService {
         }
 
         public void deleteGroup(UUID uuid, Long id) {
-            EventEntity event = eventJpaRepository.findByOrganizerId(uuid);
-            if (event == null) {
-                throw new NotFoundException("Could not find event with UUID " + uuid);
-            }
+            eventService.getEventByUUIDForOrganizer(uuid);
             groupJpaRepository.deleteById(id);
         }
 
         public AttenderDto appendAttender(Long groupId, AttenderDto attenderDto) {
-            Optional<GroupEntity> optionalGroup = groupJpaRepository.findById(groupId);
-            if (optionalGroup.isEmpty()) {
-                throw new NotFoundException("Could not find group with id " + groupId);
-            }
-            GroupEntity groupEntity = optionalGroup.get();
+            GroupEntity groupEntity = getGroupById(groupId);
             List<AttenderEntity> attenderEntityList = groupEntity.getAttenders();
             if (attenderEntityList.size() >= 9) {
                 throw new UnsupportedOperationException("Max group size is 9.");
@@ -68,6 +61,26 @@ public interface GroupService {
             attenderJpaRepository.save(attenderEntity);
 
             return attenderEntity.toDto();
+        }
+
+        public void signUpAttender(Long attenderId, AttenderDto attenderDto) {
+            Optional<AttenderEntity> optionalAttender = attenderJpaRepository.findById(attenderId);
+            if (optionalAttender.isEmpty()) {
+                throw new NotFoundException("Could not find attender with id " + attenderId);
+            }
+
+            AttenderEntity attenderEntity = optionalAttender.get();
+            attenderEntity.setActualProfession(attenderDto.getActualProfession());
+            attenderEntity.setNickname(attenderDto.getNickname());
+            attenderJpaRepository.save(attenderEntity);
+        }
+
+        public GroupEntity getGroupById(Long groupId) {
+            Optional<GroupEntity> optionalGroup = groupJpaRepository.findById(groupId);
+            if (optionalGroup.isEmpty()) {
+                throw new NotFoundException("Could not find group with id " + groupId);
+            }
+            return optionalGroup.get();
         }
 
 
