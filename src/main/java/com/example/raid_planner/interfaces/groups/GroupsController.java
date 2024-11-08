@@ -44,8 +44,11 @@ public class GroupsController {
     }
 
     @PatchMapping("/{groupId}/attender/{attenderId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void patchAttender(@PathVariable UUID uuid, @PathVariable Long groupId, @PathVariable Long attenderId, @RequestBody PatchedAttenderRequest request) {
+    @ResponseStatus(HttpStatus.OK)
+    public void patchAttender(@PathVariable UUID uuid,
+                              @PathVariable Long groupId,
+                              @PathVariable Long attenderId,
+                              @RequestBody PatchedAttenderRequest request) {
         eventService.getEventByUUIDForAttenderOrOrganizer(uuid);
         groupService.signUpAttender(
                 attenderId,

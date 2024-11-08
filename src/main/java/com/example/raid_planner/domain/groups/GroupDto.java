@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @EqualsAndHashCode
 @ToString
@@ -14,4 +16,6 @@ public class GroupDto {
     private Long id;
     private GroupType groupType;
     private Boolean ready;
+
+    List<AttenderDto> attenders;
 }

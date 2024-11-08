@@ -1,5 +1,6 @@
 package com.example.raid_planner.infrastructure.repository.groups;
 
+import com.example.raid_planner.domain.groups.AttenderDto;
 import com.example.raid_planner.domain.groups.GroupDto;
 import com.example.raid_planner.infrastructure.repository.attender.AttenderEntity;
 import com.example.raid_planner.infrastructure.repository.events.EventEntity;
@@ -44,6 +45,14 @@ public class GroupEntity {
                 .id(this.id)
                 .groupType(this.groupType)
                 .ready(this.ready)
+                .attenders(mapAttenders())
                 .build();
+    }
+
+    private List<AttenderDto> mapAttenders() {
+        if (attenders == null) {
+            return List.of();
+        }
+        return this.attenders.stream().map(AttenderEntity::toDto).toList();
     }
 }
