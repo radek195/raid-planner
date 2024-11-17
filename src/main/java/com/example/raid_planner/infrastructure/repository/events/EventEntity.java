@@ -36,7 +36,7 @@ public class EventEntity {
     private LocalDateTime plannedStart;
     private boolean ready;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private List<GroupEntity> groups;
 
 

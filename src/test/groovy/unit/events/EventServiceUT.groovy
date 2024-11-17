@@ -4,6 +4,7 @@ import com.example.raid_planner.domain.events.EventDto
 import com.example.raid_planner.domain.events.EventService
 
 import com.example.raid_planner.infrastructure.exceptions.EventNotReadyException
+import com.example.raid_planner.infrastructure.repository.events.EventEntity
 import com.example.raid_planner.infrastructure.repository.events.EventJpaRepository
 import com.example.raid_planner.infrastructure.utils.TimeService
 import spock.lang.Specification
@@ -20,7 +21,7 @@ class EventServiceUT extends Specification {
     def 'should return event for organizer'() {
         given:
             EventDto event = getNotReadyEventDto(UUID.randomUUID(), UUID.randomUUID())
-            eventJpaRepository.findByOrganizerIdOrAttendeeId(event.organizerId, event.organizerId) >> event
+            eventJpaRepository.findByOrganizerIdOrAttendeeId(event.organizerId, event.organizerId) >> EventEntity.from(event)
 
         when:
             EventDto retrievedEvent = eventService.getByUUID(event.organizerId)
@@ -32,7 +33,7 @@ class EventServiceUT extends Specification {
     def 'should return event for attendee'() {
         given:
             EventDto event = getReadyEventDto(UUID.randomUUID(), UUID.randomUUID())
-            eventJpaRepository.findByOrganizerIdOrAttendeeId(event.attendeeId, event.attendeeId) >> event
+            eventJpaRepository.findByOrganizerIdOrAttendeeId(event.attendeeId, event.attendeeId) >> EventEntity.from(event)
 
         when:
             EventDto retrievedEvent = eventService.getByUUID(event.attendeeId)
@@ -44,7 +45,7 @@ class EventServiceUT extends Specification {
     def 'should throw EventNotReadyException when retrieving not ready event by attendee'() {
         given:
             EventDto event = getNotReadyEventDto(UUID.randomUUID(), UUID.randomUUID())
-            eventJpaRepository.findByOrganizerIdOrAttendeeId(event.attendeeId, event.attendeeId) >> event
+            eventJpaRepository.findByOrganizerIdOrAttendeeId(event.attendeeId, event.attendeeId) >> EventEntity.from(event)
 
         when:
             eventService.getByUUID(event.attendeeId)
@@ -58,6 +59,7 @@ class EventServiceUT extends Specification {
             .ready(false)
             .organizerId(organizerId)
             .attendeeId(attendeeId)
+            .groups(List.of())
             .build()
     }
 
@@ -66,6 +68,7 @@ class EventServiceUT extends Specification {
                 .ready(true)
                 .organizerId(organizerId)
                 .attendeeId(attendeeId)
+                .groups(List.of())
                 .build()
     }
 }

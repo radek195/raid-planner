@@ -19,4 +19,14 @@ class SqlHelper {
         sql.rows("SELECT * FROM ATTENDER WHERE group_id = $groupId" as String)
     }
 
+    List<GroovyRowResult> selectAllFromGroups() {
+        sql.rows("SELECT * FROM GROUPS" as String)
+    }
+
+    void cleanDatabase() {
+        sql.execute("DELETE FROM ATTENDER" as String)
+        sql.execute("DELETE FROM GROUPS" as String)
+        sql.execute("DELETE FROM EVENTS" as String)
+    }
+
 }
