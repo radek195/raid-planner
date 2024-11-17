@@ -11,6 +11,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "api/v1/events")
 @RequiredArgsConstructor
+@CrossOrigin
 public class EventsController {
 
     private final EventService eventService;

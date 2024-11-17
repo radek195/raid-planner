@@ -13,6 +13,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(path = "api/v1/events/{uuid}/groups")
 @RequiredArgsConstructor
+@CrossOrigin
 public class GroupsController {
 
     private final EventService eventService;
